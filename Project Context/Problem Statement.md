@@ -1,0 +1,147 @@
+# Problem Statement
+
+**Project:** Dubai AI Travel Planner — Multi-Agent Systems
+**Track:** Agentic Development
+
+---
+
+## Background
+
+Planning a trip involves multiple interconnected decisions, including selecting attractions, finding accommodation, organizing transportation, estimating expenses, and ensuring the itinerary matches the traveler's preferences.
+
+A traditional AI chatbot may generate an itinerary in a single response, but it does not necessarily verify travel times, check budget constraints, or validate recommendations against external information.
+
+This project explores how multiple specialized AI agents can collaborate to solve a real-world travel-planning problem, demonstrating the capabilities and differences of multi-agent frameworks.
+
+## Problem Statement
+
+Build a **Dubai-focused AI Travel Planning System** that converts a natural-language travel request into a personalized, budget-conscious, and practical travel itinerary.
+
+Instead of relying on a single AI agent, the system will divide the planning process among specialized agents responsible for destination research, logistics, budgeting, and quality validation.
+
+The application will demonstrate two multi-agent frameworks:
+
+- **LangGraph:** Graph-based orchestration, shared state, parallel execution, conditional decisions, and feedback loops.
+- **CrewAI:** Role-based AI agents, task delegation, and collaboration between specialized agents.
+
+> The goal is not to build a commercial travel-booking platform but to demonstrate how multi-agent architectures solve problems through coordinated decision-making.
+
+## Example User Request
+
+> Plan a 4-day trip to Dubai with a budget of AED 5,000, excluding flights. I enjoy cultural attractions, local food, and beaches. I prefer affordable hotels and want to avoid crowded places.
+
+The system should generate:
+
+1. A personalized day-by-day itinerary with suggested timings.
+2. Recommended attractions, restaurants, and accommodation areas.
+3. Transportation options and estimated travel durations.
+4. A category-wise budget breakdown in AED.
+5. Alternatives when the proposed itinerary exceeds the budget.
+6. A final itinerary validated against the user's preferences and constraints.
+
+## Multi-Agent System Design
+
+| # | Agent | Responsibilities |
+|---|-------|------------------|
+| 1 | **Orchestrator Agent** | Understands the travel request, extracts constraints, coordinates specialized agents, manages dependencies, and assembles the final itinerary. |
+| 2 | **Destination Research Agent** | Researches Dubai attractions, restaurants, cultural experiences, and neighborhoods. Recommends activities based on user interests, location, and preferences. |
+| 3 | **Logistics Agent** | Suggests accommodation areas, calculates distances and travel times, identifies transportation options, and organizes activities into a practical geographical sequence. |
+| 4 | **Budget Agent** | Estimates accommodation, food, transportation, and activity costs. Calculates the total projected expenditure and recommends alternatives when costs exceed the budget. |
+| 5 | **Review Agent** | Evaluates the complete itinerary for budget compliance, schedule feasibility, preference alignment, duplicate activities, and missing information. Requests revisions when necessary. |
+
+## Dubai Travel Data — Sources and Integration
+
+The system will combine publicly available Dubai information, external APIs, and a small curated dataset to generate recommendations.
+
+| Data requirement | Proposed source | Usage |
+|------------------|-----------------|-------|
+| Attractions and tourism information | Visit Dubai and Data.Dubai / Dubai Pulse | Research attractions, neighborhoods, and cultural experiences |
+| Restaurants and location details | Google Places API or OpenStreetMap / Overpass | Discover places, categories, geographical coordinates, and available place details |
+| Routes and transportation | Google Routes API and official Dubai RTA information | Estimate distances, journey durations, transit options, and public transport fares |
+| Accommodation | Curated hotel dataset; optionally Amadeus Hotel APIs | Suggest hotel areas and estimate accommodation expenses |
+| Activity and food costs | Published attraction prices and curated AED price ranges | Calculate estimated trip expenditure |
+| Weather *(optional)* | Open-Meteo API | Recommend weather-appropriate activities for supported travel dates |
+
+### Data Integration Approach
+
+- Begin with a small, curated Dubai dataset stored in JSON or SQLite for reliable demonstrations.
+- Integrate Google Places and Routes APIs for location discovery and travel-time estimates where API access is configured.
+- Use official RTA fare information and curated attraction prices for budgeting.
+- Clearly distinguish verified information, API-derived results, and estimated costs.
+- Provide a fallback to the local dataset when external APIs are unavailable.
+- Live hotel bookings, ticket purchases, and guaranteed real-time prices are **outside the initial scope**.
+
+## Framework Demonstration
+
+The application will support two execution modes using the same user input and data sources.
+
+### Mode A — LangGraph
+
+Implement the agents as nodes in a stateful graph. Demonstrate parallel research, shared information, conditional routing, and a review-feedback loop that triggers itinerary revisions.
+
+### Mode B — CrewAI
+
+Implement specialized agents with defined roles, goals, tools, and tasks. Demonstrate task delegation, agent collaboration, and synthesis of their findings into a final itinerary.
+
+Both modes will produce the **same structured itinerary format** so their execution approaches can be compared.
+
+## End-to-End Workflow
+
+```
+User Travel Request
+        |
+Parse Requirements
+        |
+        v
+   Orchestrator
+        |
+        +-------------------+
+        |                   |
+        v                   v
+ Destination Agent     Logistics Agent
+        |                   |
+        +---------+---------+
+                  |
+                  v
+             Budget Agent
+                  |
+                  v
+              Review Agent
+                  |
+           +------+------+
+           |             |
+         Pass          Revise
+           |             |
+           v             |
+     Final Itinerary <---+
+```
+
+The application should also display which agent is executing, what information it produces, and how the overall plan changes during review.
+
+## Technology Stack
+
+| Component | Choice |
+|-----------|--------|
+| Development environment | Cursor |
+| Programming language | Python |
+| Multi-agent frameworks | LangGraph and CrewAI |
+| LLM | Configurable LLM provider |
+| Frontend | Streamlit for a simple interactive demonstration |
+| Data | JSON / SQLite with optional external API integrations |
+| Validation | Pydantic schemas and rule-based budget and itinerary checks |
+
+## MVP Scope and Success Criteria
+
+**Initial scope:** Dubai only, covering short trips of 1–7 days, with budget calculations in AED.
+
+The project will be considered successful when it can:
+
+- [ ] Accept natural-language travel requirements and produce a structured Dubai itinerary.
+- [ ] Demonstrate meaningful collaboration among specialized agents.
+- [ ] Generate realistic travel schedules and estimated budgets using available data.
+- [ ] Detect and revise at least one itinerary constraint violation.
+- [ ] Visualize agent execution and compare LangGraph and CrewAI approaches.
+
+## Expected Outcome
+
+A working, interactive multi-agent prototype that helps technical and nontechnical audiences understand agent specialization, orchestration, collaboration, shared context, and validation through a practical travel-planning use case.
