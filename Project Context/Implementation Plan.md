@@ -23,6 +23,7 @@
 - The test suite runs **offline with no API keys**. Tests that need network access or an LLM are marked `@pytest.mark.live` and skipped by default.
 - Secrets live in `.env`, which is gitignored. `.env.example` lists every variable.
 - Commit messages end with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
+- The app is deployed on Streamlit Community Cloud from `main`, with entry point `app.py` and Python 3.11. A placeholder `app.py` and `requirements.txt` already exist, and Task 13 replaces the placeholder. Keep `requirements.txt` in step with `pyproject.toml` (`uv export --no-dev --no-hashes -o requirements.txt`), and keep `main` deployable after every task. Cloud reads LLM keys from the app's **Secrets** settings, not `.env`.
 
 ## Review Focus
 
